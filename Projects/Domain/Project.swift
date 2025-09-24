@@ -4,7 +4,7 @@ import ProjectDescriptionHelpers
 let project = Project(
     name: "Domain",
     targets: [
-        Project.makeTarget(
+        .makeTarget(
             name: "Domain",
             product: .framework,
             dependencies: []

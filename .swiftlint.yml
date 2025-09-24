@@ -1,0 +1,20 @@
+# SwiftLint의 기본 규칙을 따르면서, 일부 규칙은 비활성화합니다.
+included:
+  - Projects
+
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+  - identifier_name
+  - function_body_length
+  - type_body_length
+  - file_length
+  - large_tuple
+
+# 폴더명의 첫 글자가 대문자인 경우를 허용합니다.
+identifier_name:
+  excluded:
+    - App
+    - Data
+    - Domain
+    - Presentation

@@ -29,6 +29,7 @@ public extension Target {
             destinations: destinations,
             product: product,
             bundleId: "\(baseBundleId).\(name)",
+            deploymentTargets: .iOS("17.0"),
             infoPlist: .default,
             sources: ["Sources/**"],
             resources: product == .app ? ["Resources/**"] : [],

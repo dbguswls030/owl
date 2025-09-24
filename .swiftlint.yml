@@ -2,10 +2,12 @@
 included:
   - Projects
 
+excluded:
+  - Projects/**/Project.swift
+
 disabled_rules:
   - trailing_whitespace
   - line_length
-  - identifier_name
   - function_body_length
   - type_body_length
   - file_length

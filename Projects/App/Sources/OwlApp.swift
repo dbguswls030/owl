@@ -1,11 +1,11 @@
-import SwiftUI
 import Presentation
+import SwiftUI
 
 @main
 struct OwlApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PresentationFactory.makeRootView()
         }
     }
 }

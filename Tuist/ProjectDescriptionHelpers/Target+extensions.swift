@@ -38,6 +38,7 @@ public extension Target {
     static func makeTarget(
         name: String,
         product: Product,
+        infoPlist: InfoPlist? = .default,
         dependencies: [TargetDependency] = []
     ) -> Target {
         let destinations: Destinations = .iOS
@@ -49,7 +50,7 @@ public extension Target {
             product: product,
             bundleId: "\(baseBundleId).\(name)",
             deploymentTargets: .iOS("17.0"),
-            infoPlist: .default,
+            infoPlist: infoPlist,
             sources: ["Sources/**"],
             resources: product == .app ? ["Resources/**"] : [],
             scripts: commonScripts,

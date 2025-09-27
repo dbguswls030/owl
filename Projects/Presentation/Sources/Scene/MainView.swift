@@ -9,18 +9,17 @@ struct MainView: View {
     var body: some View {
         VStack {
             if let image = selectedImage {
-                // TODO: 화면 크게
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 300, height: 300)
+                    .frame(maxWidth: .infinity, maxHeight: 300)
+                    .border(.gray, width: 1)
             } else {
                 Text("No Image Selected")
                     .foregroundStyle(.gray)
-                    .frame(width: 300, height: 300)
+                    .frame(maxWidth: .infinity, maxHeight: 300)
                     .border(.gray, width: 1)
             }
-
             Button {
                 showPhotoPicker = true
             } label: {
@@ -30,9 +29,16 @@ struct MainView: View {
                     .frame(width: 50, height: 50)
                     .clipShape(.circle)
             }
+            .padding()
         }
         .sheet(isPresented: $showPhotoPicker) {
             PHPhotoPickerView(selectedImage: $selectedImage)
         }
+    }
+}
+
+struct MainView_Previews: PreviewProvider {
+    static var previews: some View {
+        MainView()
     }
 }

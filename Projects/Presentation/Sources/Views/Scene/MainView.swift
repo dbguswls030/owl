@@ -7,29 +7,20 @@ struct MainView: View {
     init() {}
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
+            SettingView()
             if let image = selectedImage {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: 300)
-                    .border(.gray, width: 1)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .clipped()
             } else {
                 Text("No Image Selected")
                     .foregroundStyle(.gray)
-                    .frame(maxWidth: .infinity, maxHeight: 300)
-                    .border(.gray, width: 1)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            Button {
-                showPhotoPicker = true
-            } label: {
-                 Image(systemName: "plus.circle.fill")
-                    .resizable()
-                    .foregroundStyle(.black)
-                    .frame(width: 50, height: 50)
-                    .clipShape(.circle)
-            }
-            .padding()
+            PhotoPickerView(showPhotoPicker: $showPhotoPicker)
         }
         .sheet(isPresented: $showPhotoPicker) {
             PHPhotoPickerView(selectedImage: $selectedImage)
@@ -37,8 +28,6 @@ struct MainView: View {
     }
 }
 
-struct MainView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
-    }
+#Preview {
+    MainView()
 }

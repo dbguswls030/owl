@@ -9,6 +9,7 @@ struct MainView: View {
     var body: some View {
         VStack {
             if let image = selectedImage {
+                // TODO: 화면 크게
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
@@ -20,13 +21,15 @@ struct MainView: View {
                     .border(.gray, width: 1)
             }
 
-            Button("open PHPicker") {
+            Button {
                 showPhotoPicker = true
+            } label: {
+                 Image(systemName: "plus.circle.fill")
+                    .resizable()
+                    .foregroundStyle(.black)
+                    .frame(width: 50, height: 50)
+                    .clipShape(.circle)
             }
-            .padding()
-            .background(.purple)
-            .foregroundStyle(.white)
-            .clipShape(.circle)
         }
         .sheet(isPresented: $showPhotoPicker) {
             PHPhotoPickerView(selectedImage: $selectedImage)

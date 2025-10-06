@@ -18,7 +18,8 @@ let project = Project(
                     ],
                     "UILaunchStoryboardName": "LaunchScreen.storyboard",
 //                    "CFBundleIconName" : "AppIcon",
-                    "ITSAppUsesNonExemptEncryption": false
+                    "ITSAppUsesNonExemptEncryption": false,
+                    "NSPhotoLibraryUsageDescription": "앨범에서 사진을 편집하기 위해 사진 라이브러리 접근이 필요합니다."
                 ]
             ),
             dependencies: [

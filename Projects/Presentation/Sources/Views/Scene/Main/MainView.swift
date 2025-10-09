@@ -8,6 +8,7 @@ struct MainView: View {
     }
     @State private var next = false
     @State private var isPresentedAlert = false
+
     init() {}
 
     var body: some View {

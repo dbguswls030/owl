@@ -7,7 +7,7 @@ struct MainView: View {
         selectedImage != nil
     }
     @State private var next = false
-
+    @State private var isPresentedAlert = false
     init() {}
 
     var body: some View {
@@ -39,11 +39,26 @@ struct MainView: View {
                 if isEditing {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
-                            selectedImage = nil
+                            isPresentedAlert = true
                         } label: {
                             Image(systemName: "xmark")
                         }
+                        .alert(
+                            "사진 초기화",
+                            isPresented: $isPresentedAlert
+                            ) {
+                                Button("초기화", role: .destructive) {
+                                    selectedImage = nil
+                                    isPresentedAlert = false
+                                }
+                                Button("취소", role: .cancel) {
+                                    isPresentedAlert = false
+                                }
+                            } message: {
+                                Text("선택된 사진을 초기화하시겠습니까?")
+                            }
                     }
+                    // TODO: 다음 버튼 시 page flow
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
                             next = true

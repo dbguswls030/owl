@@ -58,7 +58,6 @@ struct MainView: View {
                                 Text("선택된 사진을 초기화하시겠습니까?")
                             }
                     }
-                    // TODO: 다음 버튼 시 page flow
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
                             next = true
@@ -69,6 +68,9 @@ struct MainView: View {
                         .disabled(!isEditing)
                     }
                 }
+            }
+            .navigationDestination(isPresented: $next) {
+                EditView()
             }
         }
     }

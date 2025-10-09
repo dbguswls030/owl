@@ -5,7 +5,7 @@ let project = Project(
     name: "Data",
     targets: [
         .makeTarget(
-            name: "Data",
+            name: .Data,
             product: .framework,
             dependencies: [
                 .project(

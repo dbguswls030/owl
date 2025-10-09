@@ -5,7 +5,7 @@ let project = Project(
     name: "App",
     targets: [
         .makeTarget(
-            name: "App",
+            name: .App,
             product: .app,
             infoPlist: .extendingDefault(
                 with: [

@@ -9,8 +9,6 @@ struct MainView: View {
     @State private var next = false
     @State private var isPresentedAlert = false
 
-    init() {}
-
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -71,7 +69,9 @@ struct MainView: View {
                 }
             }
             .navigationDestination(isPresented: $next) {
-                EditView()
+                if let selectedImage = selectedImage {
+                    EditView(selectedImage: selectedImage)
+                }
             }
         }
     }

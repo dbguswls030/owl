@@ -11,6 +11,7 @@ let project = Project(
                 with: [
                     "CFBundleDisplayName": "Owl",
                     "LSApplicationCategoryType": "public.app-category.photo-video",
+                    "UIUserInterfaceStyle": "Dark",
                     "CFBundleShortVersionString": "1.0.0",
                     "CFBundleVersion" : "1",
                     "UISupportedInterfaceOrientations": [

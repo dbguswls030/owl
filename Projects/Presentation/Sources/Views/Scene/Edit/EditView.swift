@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct EditView: View {
+    @EnvironmentObject private var diContainer: DIContainerWrapper
     @State private var save = false
     var selectedImage: UIImage
 
@@ -11,10 +12,11 @@ struct EditView: View {
                 .scaledToFit()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .clipped()
-            VStack {
 
-            }
-            .frame(maxWidth: .infinity, maxHeight: 150)
+//            VStack {
+//
+//            }
+//            .frame(maxWidth: .infinity, maxHeight: 150)
         }
         .background(.black)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -31,6 +33,11 @@ struct EditView: View {
                     Image(systemName: "tray.and.arrow.down")
                         .foregroundStyle(.white)
                 }
+            }
+        }
+        .onChange(of: save) { _, newValue in
+            if newValue {
+                diContainer.container.makeSavePhotoUseCase().execute()
             }
         }
     }

@@ -1,6 +1,8 @@
+import Domain
 import SwiftUI
 
 struct MainView: View {
+    @EnvironmentObject var diContainerWrapper: DIContainerWrapper
     @State private var showPhotoPicker = false
     @State private var selectedImage: UIImage?
     private var isEditing: Bool {
@@ -78,5 +80,18 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
+    class MockSavePhotoUseCase: SavePhotoUseCase {
+        func execute() {}
+    }
+
+    class MockDIContainer: DIContainerProtocol {
+        func makeSavePhotoUseCase() -> SavePhotoUseCase {
+            MockSavePhotoUseCase()
+        }
+    }
+
+    let mockContainer = MockDIContainer()
+    let wrapper = DIContainerWrapper(container: mockContainer)
+    return MainView()
+        .environmentObject(wrapper)
 }

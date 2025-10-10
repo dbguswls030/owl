@@ -1,3 +1,5 @@
+import Foundation
+
 public protocol PhotoRepository {
-    func savePhoto()
+    func savePhoto(data: Data) async throws
 }

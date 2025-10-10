@@ -1,3 +1,5 @@
+import Foundation
+
 public protocol SavePhotoUseCase {
-    func execute()
+    func execute(data: Data) async throws
 }

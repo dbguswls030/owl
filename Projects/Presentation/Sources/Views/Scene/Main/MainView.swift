@@ -81,7 +81,7 @@ struct MainView: View {
 
 #Preview {
     class MockSavePhotoUseCase: SavePhotoUseCase {
-        func execute() {}
+        func execute(data: Data) async throws {}
     }
 
     class MockDIContainer: DIContainerProtocol {

@@ -37,8 +37,20 @@ struct EditView: View {
         }
         .onChange(of: save) { _, newValue in
             if newValue {
-                diContainer.container.makeSavePhotoUseCase().execute()
+                Task {
+                    await savePhoto()
+                }
             }
+        }
+    }
+    
+    private func savePhoto() async {
+        guard let data = selectedImage.pngData() else { return }
+        let saveUseCase = diContainer.container.makeSavePhotoUseCase()
+        do {
+            try await saveUseCase.execute(data: data)
+        } catch {
+            print(error)
         }
     }
 }

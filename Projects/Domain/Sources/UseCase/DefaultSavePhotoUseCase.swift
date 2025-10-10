@@ -1,3 +1,5 @@
+import Foundation
+
 final public class DefaultSavePhotoUseCase: SavePhotoUseCase {
     private let repository: PhotoRepository
 
@@ -5,7 +7,7 @@ final public class DefaultSavePhotoUseCase: SavePhotoUseCase {
         self.repository = repository
     }
 
-    public func execute() {
-        print("\(Self.self) execute")
+    public func execute(data: Data) async throws {
+        try await repository.savePhoto(data: data)
     }
 }

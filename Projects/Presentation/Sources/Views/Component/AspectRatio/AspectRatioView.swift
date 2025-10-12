@@ -3,6 +3,7 @@ import SwiftUI
 struct AspectRatioView: View {
     var body: some View {
         VStack {
+            Spacer()
             HStack {
                 Text("1:1")
                     .foregroundStyle(.white)
@@ -13,9 +14,10 @@ struct AspectRatioView: View {
                 Text("16:9")
                     .foregroundStyle(.white)
             }
+            Spacer()
         }
         .padding([.leading, .trailing], 20)
-        .frame(maxWidth: .infinity, maxHeight: 150)
+        .frame(maxWidth: .infinity)
         .background(.black)
     }
 }

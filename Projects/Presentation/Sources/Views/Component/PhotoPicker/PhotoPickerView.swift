@@ -16,7 +16,7 @@ struct PhotoPickerView: View {
             }
             .padding(.bottom)
         }
-        .frame(maxWidth: .infinity, maxHeight: 150)
+        .frame(maxWidth: .infinity)
         .background(.black)
     }
 }

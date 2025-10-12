@@ -6,14 +6,16 @@ struct EditView: View {
     var selectedImage: UIImage
 
     var body: some View {
-        VStack(spacing: 0) {
-            Image(uiImage: selectedImage)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .clipped()
-
-            AspectRatioView()
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                Image(uiImage: selectedImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .clipped()
+                AspectRatioView()
+                    .frame(height: geometry.size.height * 0.35)
+            }
         }
         .background(.black)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

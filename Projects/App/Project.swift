@@ -5,12 +5,13 @@ let project = Project(
     name: "App",
     targets: [
         .makeTarget(
-            name: "App",
+            name: .App,
             product: .app,
             infoPlist: .extendingDefault(
                 with: [
                     "CFBundleDisplayName": "Owl",
                     "LSApplicationCategoryType": "public.app-category.photo-video",
+                    "UIUserInterfaceStyle": "Dark",
                     "CFBundleShortVersionString": "1.0.0",
                     "CFBundleVersion" : "1",
                     "UISupportedInterfaceOrientations": [

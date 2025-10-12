@@ -36,7 +36,7 @@ fileprivate let commonScripts: [TargetScript] = [
 
 public extension Target {
     static func makeTarget(
-        name: String,
+        name: Module,
         product: Product,
         infoPlist: InfoPlist? = .default,
         dependencies: [TargetDependency] = []
@@ -45,14 +45,14 @@ public extension Target {
         let baseBundleId = "ryuhyeonjin.owl"
 
         return .target(
-            name: name,
+            name: name.rawValue,
             destinations: destinations,
             product: product,
             bundleId: "\(baseBundleId).\(name)",
             deploymentTargets: .iOS("17.0"),
             infoPlist: infoPlist,
             sources: ["Sources/**"],
-            resources: product == .app ? ["Resources/**"] : [],
+            resources: name == .App || name == .Presentation ? ["Resources/**"] : [],
             scripts: commonScripts,
             dependencies: dependencies
         )

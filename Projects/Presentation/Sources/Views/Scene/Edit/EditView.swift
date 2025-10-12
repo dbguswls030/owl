@@ -13,10 +13,7 @@ struct EditView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .clipped()
 
-//            VStack {
-//
-//            }
-//            .frame(maxWidth: .infinity, maxHeight: 150)
+            AspectRatioView()
         }
         .background(.black)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -43,7 +40,7 @@ struct EditView: View {
             }
         }
     }
-    
+
     private func savePhoto() async {
         guard let data = selectedImage.pngData() else { return }
         let saveUseCase = diContainer.container.makeSavePhotoUseCase()

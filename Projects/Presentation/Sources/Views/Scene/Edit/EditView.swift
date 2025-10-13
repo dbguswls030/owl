@@ -3,42 +3,53 @@ import SwiftUI
 struct EditView: View {
     @EnvironmentObject private var diContainer: DIContainerWrapper
     @State private var save = false
+    @State private var successedSave = false
     var selectedImage: UIImage
 
     var body: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 0) {
-                Image(uiImage: selectedImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .clipped()
-                AspectRatioView()
-                    .frame(height: geometry.size.height * 0.35)
+        ZStack {
+            GeometryReader { geometry in
+                VStack(spacing: 0) {
+                    Image(uiImage: selectedImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .clipped()
+                    AspectRatioView()
+                        .frame(height: geometry.size.height * 0.35)
+                }
             }
-        }
-        .background(.black)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("편집")
-                    .foregroundStyle(.white)
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    save = true
-                } label: {
-                    Image(systemName: "tray.and.arrow.down")
+            .background(.black)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("편집")
                         .foregroundStyle(.white)
                 }
-            }
-        }
-        .onChange(of: save) { _, newValue in
-            if newValue {
-                Task {
-                    await savePhoto()
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        save = true
+                    } label: {
+                        Image(systemName: "tray.and.arrow.down")
+                            .foregroundStyle(.white)
+                    }
                 }
+            }
+            .onChange(of: save) { _, newValue in
+                if newValue {
+                    Task {
+                        await savePhoto()
+                    }
+                }
+            }
+            if successedSave {
+                ToastView()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            successedSave = false
+                        }
+                    }
             }
         }
     }
@@ -48,6 +59,7 @@ struct EditView: View {
         let saveUseCase = diContainer.container.makeSavePhotoUseCase()
         do {
             try await saveUseCase.execute(data: data)
+            successedSave = true
         } catch {
             print(error)
         }

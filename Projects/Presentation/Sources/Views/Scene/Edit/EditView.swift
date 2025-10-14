@@ -4,6 +4,7 @@ struct EditView: View {
     @EnvironmentObject private var diContainer: DIContainerWrapper
     @State private var save = false
     @State private var successedSave = false
+    @State private var selectedRatio: AspectRatioType = .original
     var selectedImage: UIImage
 
     var body: some View {
@@ -13,9 +14,10 @@ struct EditView: View {
                     Image(uiImage: selectedImage)
                         .resizable()
                         .scaledToFit()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .aspectRatio(selectedRatio.ratio, contentMode: .fit)
                         .clipped()
-                    AspectRatioView()
+                    Spacer()
+                    AspectRatioView(selectedRatio: $selectedRatio)
                         .frame(height: geometry.size.height * 0.35)
                 }
             }
@@ -47,7 +49,9 @@ struct EditView: View {
                 ToastView()
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            successedSave = false
+                            withAnimation {
+                                successedSave = false
+                            }
                         }
                     }
             }
@@ -59,7 +63,9 @@ struct EditView: View {
         let saveUseCase = diContainer.container.makeSavePhotoUseCase()
         do {
             try await saveUseCase.execute(data: data)
-            successedSave = true
+            withAnimation {
+                successedSave = true
+            }
         } catch {
             print(error)
         }

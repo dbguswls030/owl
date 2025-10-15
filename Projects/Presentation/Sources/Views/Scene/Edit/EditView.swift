@@ -10,15 +10,27 @@ struct EditView: View {
     var body: some View {
         ZStack {
             GeometryReader { geometry in
+                let finalRatio: CGFloat? = {
+                    if selectedRatio == .wallpaper {
+                        return geometry.size.width / geometry.size.height
+                    } else {
+                        return selectedRatio.ratio
+                    }
+                }()
                 VStack(spacing: 0) {
-                    Image(uiImage: selectedImage)
-                        .resizable()
-                        .scaledToFit()
-                        .aspectRatio(selectedRatio.ratio, contentMode: .fit)
-                        .clipped()
-                    Spacer()
+                    ZStack {
+                        Color.clear
+                            .aspectRatio(finalRatio, contentMode: .fit)
+                            .overlay {
+                                Image(uiImage: selectedImage)
+                                    .resizable()
+                                    .scaledToFill()
+                            }
+                            .clipped()
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     AspectRatioView(selectedRatio: $selectedRatio)
-                        .frame(height: geometry.size.height * 0.35)
+                        .frame(height: 150)
                 }
             }
             .background(.black)
@@ -59,7 +71,21 @@ struct EditView: View {
     }
 
     private func savePhoto() async {
-        guard let data = selectedImage.pngData() else { return }
+        let imageToSave: UIImage
+
+        if selectedRatio == .original {
+            imageToSave = self.selectedImage
+        } else {
+            let targetRatio = selectedRatio.ratio ??
+            (selectedImage.size.width / selectedImage.size.height)
+            guard let croppedImage = selectedImage.crop(to: targetRatio) else {
+                print("오류 메시지")
+                return
+            }
+            imageToSave = croppedImage
+        }
+
+        guard let data = imageToSave.pngData() else { return }
         let saveUseCase = diContainer.container.makeSavePhotoUseCase()
         do {
             try await saveUseCase.execute(data: data)

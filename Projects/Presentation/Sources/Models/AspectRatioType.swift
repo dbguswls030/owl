@@ -4,6 +4,7 @@ import Foundation
 enum AspectRatioType: String, CaseIterable {
     case original = "원본"
     case square = "정방형"
+    case wallpaper = "배경화면"
     case custom916 = "9:16"
     case custom45 = "4:5"
     case custom57 = "5:7"
@@ -17,6 +18,8 @@ enum AspectRatioType: String, CaseIterable {
             return nil
         case .square:
             return 1.0
+        case .wallpaper:
+            return nil
         case .custom916:
             return 9.0 / 16.0
         case .custom45:

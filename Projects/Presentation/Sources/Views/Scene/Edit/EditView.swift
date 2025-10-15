@@ -30,7 +30,7 @@ struct EditView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     AspectRatioView(selectedRatio: $selectedRatio)
-                        .frame(height: 150)
+                        .frame(height: 200)
                 }
             }
             .background(.black)

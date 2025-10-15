@@ -31,7 +31,7 @@ struct MainView: View {
                 }
                 Spacer()
                 PhotoPickerView(showPhotoPicker: $showPhotoPicker)
-                    .frame(height: 150)
+                    .frame(height: 200)
             }
             .sheet(isPresented: $showPhotoPicker) {
                 PHPhotoPickerView(selectedImage: $selectedImage)

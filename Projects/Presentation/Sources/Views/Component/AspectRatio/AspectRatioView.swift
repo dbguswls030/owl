@@ -8,12 +8,16 @@ struct AspectRatioView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
                     ForEach(AspectRatioType.allCases, id: \.self) { ratioType in
-                        Button(ratioType.rawValue) {
+                        Button {
                             withAnimation {
                                 selectedRatio = ratioType
                             }
+                        } label: {
+                            Text(ratioType.rawValue)
+                                .foregroundStyle(selectedRatio == ratioType ? .orange : .white)
+                                .font(.subheadline)
+
                         }
-                        .foregroundStyle(selectedRatio == ratioType ? .orange : .white)
                     }
                 }
             }

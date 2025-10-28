@@ -36,3 +36,9 @@ extension UIImage {
         )
     }
 }
+
+extension UIImage: @retroactive Identifiable {
+    public var id: UUID {
+        UUID()
+    }
+}

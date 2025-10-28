@@ -16,7 +16,6 @@ struct AspectRatioView: View {
                             Text(ratioType.rawValue)
                                 .foregroundStyle(selectedRatio == ratioType ? .orange : .white)
                                 .font(.subheadline)
-
                         }
                     }
                 }

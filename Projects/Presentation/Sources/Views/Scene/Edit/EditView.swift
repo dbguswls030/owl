@@ -3,14 +3,14 @@ import SwiftUI
 struct EditView: View {
     @EnvironmentObject private var diContainer: DIContainerWrapper
     @State private var finishedEdit = false
-    @State private var showExportView = false
     @State private var selectedRatio: AspectRatioType = .original
     @State private var convertedImage: UIImage?
     var selectedImage: UIImage
 
     var body: some View {
         GeometryReader { geometry in
-            let finalRatio: CGFloat? = {
+            let finalRatio:
+            CGFloat? = {
                 if selectedRatio == .wallpaper {
                     return geometry.size.width / geometry.size.height
                 } else {
@@ -54,11 +54,10 @@ struct EditView: View {
             if newValue {
                 Task {
                     convertedImage = await convertPhoto()
-                    showExportView = true
                 }
             }
         }
-        .sheet(item: $convertedImage) { image in
+        .fullScreenCover(item: $convertedImage) { image in
             ExportView(editedImage: image)
         }
     }

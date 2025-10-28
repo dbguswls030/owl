@@ -2,45 +2,57 @@ import SwiftUI
 
 struct ExportView: View {
     @EnvironmentObject private var diContainer: DIContainerWrapper
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     @State private var showToast = false
     var editedImage: UIImage
 
     var body: some View {
         ZStack {
-            VStack(spacing: 16) {
-                HStack(alignment: .top) {
+            VStack(spacing: 0) {
+                HStack {
                     Button {
                         dismiss()
                     } label: {
                         Image(systemName: "xmark")
-                           .resizable()
-//                           .foregroundStyle(.gray)
-                           .frame(width: 32, height: 32)
-                           .clipShape(.circle)
+                            .font(.title2)
+                            .foregroundStyle(.white)
                     }
-                    .padding()
+
+                    Spacer()
+
+                    Text("내보내기")
+                        .font(.headline)
+                        .padding(.trailing)
 
                     Spacer()
                 }
+                .frame(height: 44)
+                .padding(.horizontal)
+
+                VStack(spacing: 0) {
+                    Color.clear
+                        .aspectRatio(nil, contentMode: .fit)
+                        .overlay {
+                            Image(uiImage: editedImage)
+                                .resizable()
+                                .scaledToFit()
+                        }
+                        .clipped()
+                        .frame(maxWidth: .infinity)
+                }
 
                 Spacer()
-                //                Color.clear
-                //                .aspectRatio(nil, contentMode: .fit)
-                //                    .overlay {
-                Image(uiImage: editedImage)
-                    .resizable()
-                    .scaledToFill()
-                    .aspectRatio(nil, contentMode: .fit) // 추가
-                //                    }
-                //                    .clipped()
+
                 Button {
                     Task {
                         await savePhoto()
                     }
                 } label: {
                     Text("앨범에 저장")
+                        .foregroundStyle(.white)
                 }
+
+                Spacer()
 
                 HStack(spacing: 16) {
                     Button {
@@ -49,21 +61,20 @@ struct ExportView: View {
                         Text("공유하기")
                     }
                 }
-                .frame(height: 200)
+            }
+
+            if showToast {
+                ToastView()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            withAnimation {
+                                showToast = false
+                            }
+                        }
+                    }
             }
         }
         .preferredColorScheme(.dark)
-
-        if showToast {
-            ToastView()
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        withAnimation {
-                            showToast = false
-                        }
-                    }
-                }
-        }
     }
 
     private func savePhoto() async {

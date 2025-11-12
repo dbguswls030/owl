@@ -17,24 +17,26 @@ struct EditView: View {
                     return selectedRatio.ratio
                 }
             }()
+
             VStack(spacing: 0) {
+                Spacer()
                 ZStack {
-                    Color.clear
-                        .aspectRatio(finalRatio, contentMode: .fit)
-                        .overlay {
-                            Image(uiImage: selectedImage)
-                                .resizable()
-                                .scaledToFill()
-                        }
-                        .clipped()
+                    Image(uiImage: selectedImage)
+                        .resizable()
+                        .scaledToFill()
                 }
+                .background(.white)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .aspectRatio(finalRatio, contentMode: .fit)
+                .clipped()
+                .frame(height: max(0, geometry.size.height - 200))
+                .clipped()
+
                 AspectRatioView(selectedRatio: $selectedRatio)
                     .frame(height: 200)
             }
         }
         .background(.black)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -68,13 +70,23 @@ struct EditView: View {
         if selectedRatio == .original {
             imageToSave = self.selectedImage
         } else {
-            let targetRatio = selectedRatio.ratio ??
-            (selectedImage.size.width / selectedImage.size.height)
-            guard let croppedImage = selectedImage.crop(to: targetRatio) else {
-                print("오류 메시지")
+            let targetRatio: CGFloat
+
+            if selectedRatio == .wallpaper {
+                let screenSize = UIScreen.main.bounds.size
+                targetRatio = screenSize.width / screenSize.height
+            } else {
+                guard let ratio = selectedRatio.ratio else {
+                    print("오류 메시지: 비율을 찾을 수 없습니다.")
+                    return nil
+                }
+                targetRatio = ratio
+            }
+            guard let fittedImage = selectedImage.crop(to: targetRatio, backgroundColor: .white) else {
+                print("오류 메시지: 캔버스에 맞추기 실패")
                 return nil
             }
-            imageToSave = croppedImage
+            imageToSave = fittedImage
         }
         return imageToSave
     }

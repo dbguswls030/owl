@@ -11,24 +11,30 @@ struct EditView: View {
         GeometryReader { geometry in
             let finalRatio:
             CGFloat? = {
-                if selectedRatio == .wallpaper {
-                    return geometry.size.width / geometry.size.height
+                if selectedRatio == .original {
+                    return selectedImage.size.width / selectedImage.size.height
+                } else if selectedRatio == .wallpaper {
+                    return UIScreen.main.bounds.size.width / UIScreen.main.bounds.size.height
                 } else {
                     return selectedRatio.ratio
                 }
             }()
 
             VStack(spacing: 0) {
-                Spacer()
                 ZStack {
                     Image(uiImage: selectedImage)
                         .resizable()
-                        .scaledToFill()
+                        .scaledToFit()
+                        .overlay(Color.black.opacity(0.5))
+
+                    Image(uiImage: selectedImage)
+                        .resizable()
+                        .scaledToFit()
+                        .mask {
+                            Rectangle()
+                                .aspectRatio(finalRatio, contentMode: .fit)
+                        }
                 }
-                .background(.white)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .aspectRatio(finalRatio, contentMode: .fit)
-                .clipped()
                 .frame(height: max(0, geometry.size.height - 200))
                 .clipped()
 

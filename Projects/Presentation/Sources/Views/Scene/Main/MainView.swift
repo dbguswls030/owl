@@ -13,25 +13,29 @@ struct MainView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                Spacer()
-                if let image = selectedImage {
-                    Color.clear
-                        .aspectRatio(nil, contentMode: .fit)
-                        .overlay {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFill()
-                        }
-                        .clipped()
-                } else {
-                    Text("No Image Selected")
-                        .foregroundStyle(.gray)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+            GeometryReader { geometry in
+                VStack(spacing: 0) {
+                    Spacer()
+                    if let image = selectedImage {
+                        Color.black
+                            .aspectRatio(contentMode: .fill)
+                            .overlay {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFit()
+                            }
+                            .clipped()
+                            .frame(maxHeight: geometry.size.height - 200)
+                    } else {
+                        Text("No Image Selected")
+                            .foregroundStyle(.gray)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                    Spacer()
+                    PhotoPickerView(showPhotoPicker: $showPhotoPicker)
+                        .frame(height: 200)
                 }
-                Spacer()
-                PhotoPickerView(showPhotoPicker: $showPhotoPicker)
-                    .frame(height: 200)
+                .frame(maxWidth: geometry.size.width)
             }
             .sheet(isPresented: $showPhotoPicker) {
                 PHPhotoPickerView(selectedImage: $selectedImage)

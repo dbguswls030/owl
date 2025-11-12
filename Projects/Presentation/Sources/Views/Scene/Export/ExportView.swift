@@ -30,7 +30,7 @@ struct ExportView: View {
                 .padding(.horizontal)
 
                 VStack(spacing: 0) {
-                    Color.clear
+                    Color.white
                         .aspectRatio(nil, contentMode: .fit)
                         .overlay {
                             Image(uiImage: editedImage)

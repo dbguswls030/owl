@@ -15,22 +15,19 @@ struct MainView: View {
         NavigationStack {
             GeometryReader { geometry in
                 VStack(spacing: 0) {
-                    Spacer()
-                    if let image = selectedImage {
-                        Color.black
-                            .aspectRatio(contentMode: .fill)
-                            .overlay {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFit()
-                            }
-                            .clipped()
-                            .frame(maxHeight: geometry.size.height - 200)
-                    } else {
-                        Text("No Image Selected")
-                            .foregroundStyle(.gray)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    ZStack {
+                        if let image = selectedImage {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                        } else {
+                            Text("No Image Selected")
+                                .foregroundStyle(.gray)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
                     }
+                    .frame(height: max(0, geometry.size.height - 200))
+                    .clipped()
                     Spacer()
                     PhotoPickerView(showPhotoPicker: $showPhotoPicker)
                         .frame(height: 200)

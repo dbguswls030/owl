@@ -37,7 +37,7 @@ struct EditView: View {
                 }
                 .frame(height: max(0, geometry.size.height - 200))
                 .clipped()
-
+                Spacer()
                 AspectRatioView(selectedRatio: $selectedRatio)
                     .frame(height: 200)
             }

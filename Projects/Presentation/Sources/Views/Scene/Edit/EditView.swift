@@ -2,21 +2,47 @@ import SwiftUI
 
 struct EditView: View {
     @EnvironmentObject private var diContainer: DIContainerWrapper
-    @State private var save = false
+    @State private var finishedEdit = false
+    @State private var selectedRatio: AspectRatioType = .original
+    @State private var convertedImage: UIImage?
     var selectedImage: UIImage
 
     var body: some View {
-        VStack(spacing: 0) {
-            Image(uiImage: selectedImage)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .clipped()
+        GeometryReader { geometry in
+            let finalRatio:
+            CGFloat? = {
+                if selectedRatio == .original {
+                    return selectedImage.size.width / selectedImage.size.height
+                } else if selectedRatio == .wallpaper {
+                    return UIScreen.main.bounds.size.width / UIScreen.main.bounds.size.height
+                } else {
+                    return selectedRatio.ratio
+                }
+            }()
 
-            AspectRatioView()
+            VStack(spacing: 0) {
+                ZStack {
+                    Image(uiImage: selectedImage)
+                        .resizable()
+                        .scaledToFit()
+                        .overlay(Color.black.opacity(0.5))
+
+                    Image(uiImage: selectedImage)
+                        .resizable()
+                        .scaledToFit()
+                        .mask {
+                            Rectangle()
+                                .aspectRatio(finalRatio, contentMode: .fit)
+                        }
+                }
+                .frame(height: max(0, geometry.size.height - 200))
+                .clipped()
+                Spacer()
+                AspectRatioView(selectedRatio: $selectedRatio)
+                    .frame(height: 200)
+            }
         }
         .background(.black)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -25,30 +51,50 @@ struct EditView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    save = true
+                    finishedEdit = true
                 } label: {
-                    Image(systemName: "tray.and.arrow.down")
+                    Image(systemName: "arrow.right")
                         .foregroundStyle(.white)
                 }
             }
         }
-        .onChange(of: save) { _, newValue in
+        .onChange(of: finishedEdit) { _, newValue in
             if newValue {
                 Task {
-                    await savePhoto()
+                    convertedImage = await convertPhoto()
                 }
             }
         }
+        .fullScreenCover(item: $convertedImage) { image in
+            ExportView(editedImage: image)
+        }
     }
 
-    private func savePhoto() async {
-        guard let data = selectedImage.pngData() else { return }
-        let saveUseCase = diContainer.container.makeSavePhotoUseCase()
-        do {
-            try await saveUseCase.execute(data: data)
-        } catch {
-            print(error)
+    private func convertPhoto() async -> UIImage? {
+        let imageToSave: UIImage
+
+        if selectedRatio == .original {
+            imageToSave = self.selectedImage
+        } else {
+            let targetRatio: CGFloat
+
+            if selectedRatio == .wallpaper {
+                let screenSize = UIScreen.main.bounds.size
+                targetRatio = screenSize.width / screenSize.height
+            } else {
+                guard let ratio = selectedRatio.ratio else {
+                    print("오류 메시지: 비율을 찾을 수 없습니다.")
+                    return nil
+                }
+                targetRatio = ratio
+            }
+            guard let fittedImage = selectedImage.crop(to: targetRatio, backgroundColor: .white) else {
+                print("오류 메시지: 캔버스에 맞추기 실패")
+                return nil
+            }
+            imageToSave = fittedImage
         }
+        return imageToSave
     }
 }
 

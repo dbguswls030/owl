@@ -13,19 +13,26 @@ struct MainView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                if let image = selectedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .clipped()
-                } else {
-                    Text("No Image Selected")
-                        .foregroundStyle(.gray)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+            GeometryReader { geometry in
+                VStack(spacing: 0) {
+                    ZStack {
+                        if let image = selectedImage {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                        } else {
+                            Text("No Image Selected")
+                                .foregroundStyle(.gray)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
+                    }
+                    .frame(height: max(0, geometry.size.height - 200))
+                    .clipped()
+                    Spacer()
+                    PhotoPickerView(showPhotoPicker: $showPhotoPicker)
+                        .frame(height: 200)
                 }
-                PhotoPickerView(showPhotoPicker: $showPhotoPicker)
+                .frame(maxWidth: geometry.size.width)
             }
             .sheet(isPresented: $showPhotoPicker) {
                 PHPhotoPickerView(selectedImage: $selectedImage)

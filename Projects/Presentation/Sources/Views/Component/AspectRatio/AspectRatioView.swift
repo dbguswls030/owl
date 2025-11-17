@@ -1,25 +1,33 @@
 import SwiftUI
 
 struct AspectRatioView: View {
+    @Binding var selectedRatio: AspectRatioType
+
     var body: some View {
         VStack {
-            HStack {
-                Text("1:1")
-                    .foregroundStyle(.white)
-                Spacer()
-                Text("4:3")
-                    .foregroundStyle(.white)
-                Spacer()
-                Text("16:9")
-                    .foregroundStyle(.white)
+            ScrollView(.horizontal) {
+                HStack(spacing: 20) {
+                    ForEach(AspectRatioType.allCases, id: \.self) { ratioType in
+                        Button {
+                            withAnimation {
+                                selectedRatio = ratioType
+                            }
+                        } label: {
+                            Text(ratioType.rawValue)
+                                .foregroundStyle(selectedRatio == ratioType ? .orange : .white)
+                                .font(.subheadline)
+                        }
+                    }
+                }
             }
         }
-        .padding([.leading, .trailing], 20)
-        .frame(maxWidth: .infinity, maxHeight: 150)
+        .scrollIndicators(.hidden)
+        .padding(.horizontal, 20)
+        .frame(maxWidth: .infinity)
         .background(.black)
     }
 }
 
 #Preview {
-    AspectRatioView()
+    AspectRatioView(selectedRatio: .constant(.original))
 }
